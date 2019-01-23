@@ -13,37 +13,37 @@ let fakeServerData = {
         {
           name: 'my Favorite Song',
           songs: [
-             {name: 'tst1', duration: 1234 }, 
-             {name: 'tst2', duration: 5000}, 
-             { name:'tst3', duration: 6000}, 
-             { name:'tst4', duration: 7000}
+             { name: 'tst1', duration: 1234 }, 
+             { name: 'tst2', duration: 5000 }, 
+             { name:'tst3', duration: 6000 }, 
+             { name:'tst4', duration: 7000 }
         ]
         },
         {
           name: 'my ss',
           songs: [
-            {name: 'tst5', duration: 1234 }, 
-            {name: 'tst2', duration: 5000}, 
-            { name:'tst3', duration: 6000}, 
-            { name:'tst4', duration: 7000}
+            { name: 'tst5', duration: 1234 }, 
+            { name: 'tst2', duration: 5000 }, 
+            { name:'tst3', duration: 6000 }, 
+            { name:'tst4', duration: 7000 }
         ]
         },
         {
           name: 'my tt',
           songs: [
-            {name: 'tst1', duration: 1234 }, 
-            {name: 'tst2', duration: 5000}, 
-            { name:'tst3', duration: 6000}, 
-            { name:'tst4', duration: 7000}
+            { name: 'tst1', duration: 1234 }, 
+            { name: 'tst2', duration: 5000 }, 
+            { name:'tst3', duration: 6000 }, 
+            { name:'tst4', duration: 7000 }
         ] 
         },
         {
           name: 'my ggg',
           songs: [
-            {name: 'tst1', duration: 1234 }, 
-            {name: 'tst2', duration: 5000}, 
-            { name:'tst3', duration: 6000}, 
-            { name:'tst4', duration: 7000}
+            { name: 'tst1', duration: 1234 }, 
+            { name: 'tst2', duration: 5000 }, 
+            { name:'tst3', duration: 6000 }, 
+            { name:'tst4', duration: 7000 }
         ]
         },
       ]
@@ -74,9 +74,6 @@ class HoursCounter extends Component {
       return sum + eachSong.duration
     }, 0)
 
-
-
-
     return (
       <div style={{ ...defaultStyle, width: '40%', display: 'inline-block' }}>
         <h2>{Math.round(totalDuration/60)} Hours</h2>
@@ -98,14 +95,15 @@ class Filter extends Component {
 
 class Playlist extends Component {
   render () {
+    let playlist = this.props.playlist
     return (
       <div style={{ ...defaultStyle, width: "25%", display: "inline-block" }}>
         <img src="" alt=""/>
-        <h3>Playlist Name</h3>
+        <h3>{playlist.name}</h3>
           <ul>
-            <li>Song 1</li>
-            <li>Song 2</li>
-            <li>Song 3</li>
+            {playlist.songs.map(song =>
+              <li>{song.name}</li>
+            )}
           </ul>
       </div>
     );
@@ -135,10 +133,12 @@ class App extends Component {
             <PlaylistCounter playlists={this.state.serverData.user.playlists} />
             <HoursCounter  playlists={this.state.serverData.user.playlists}/>
             <Filter />
-            <Playlist />
-            <Playlist />
-            <Playlist />
-            <Playlist />
+            {
+              this.state.serverData.user.playlists.map( playlist => 
+                 <Playlist playlist={playlist}/>
+              )
+            }
+
           </div> : <h1>Loading...</h1>
         }
       </div>
