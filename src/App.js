@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 
-
+//create variable css for global white color
 let defaultStyle = {
   color: '#fff'
 }
 
+//create fake data for dummy data
 let fakeServerData = {
     user: {
       name: 'Ferry',
@@ -50,6 +51,7 @@ let fakeServerData = {
     }
 }
 
+//Create Plalist Counter for app
 class PlaylistCounter extends Component {
   render () {
     return (
@@ -60,16 +62,17 @@ class PlaylistCounter extends Component {
   }
 }
 
-
+//Create Component Hours for app
 class HoursCounter extends Component {
   render () {
 
+    //Reduce array or combine array song tobe one array
     let allSongs = this.props.playlists.reduce((song, eachPlaylist) => {
       return song.concat(eachPlaylist.songs)
     }, [])
 
-  
-
+    //Reduce array duration to find sum duration / sum/total song duration
+    //Create Component Filter for app
     let totalDuration = allSongs.reduce((sum, eachSong) => {
       return sum + eachSong.duration
     }, 0)
@@ -82,6 +85,7 @@ class HoursCounter extends Component {
   }
 }
 
+//Create Component Filter for app
 class Filter extends Component {
   render () {
     return (
@@ -93,6 +97,7 @@ class Filter extends Component {
   }
 }
 
+//Create Component Playlist for app
 class Playlist extends Component {
   render () {
     let playlist = this.props.playlist
@@ -101,8 +106,8 @@ class Playlist extends Component {
         <img src="" alt=""/>
         <h3>{playlist.name}</h3>
           <ul>
-            {playlist.songs.map(song =>
-              <li>{song.name}</li>
+            {playlist.songs.map((song, id) => 
+              <li key={id}>{song.name}</li>
             )}
           </ul>
       </div>
@@ -111,6 +116,8 @@ class Playlist extends Component {
 }
 
 class App extends Component {
+
+  //Create State for all Component all code refer to this
   constructor() {
     super()
     this.state = {
@@ -121,30 +128,43 @@ class App extends Component {
     }
   }
 
+
+  //do function set timeout after render component
   componentDidMount() {
     setTimeout(() => {
       this.setState({serverData: fakeServerData});
     }, 1000);
   }
 
+  //render components
   render() {
-
-    let playListToRender = this.state.serverData.user ? this.state.serverData.user.playlists.filter( playlist => playlist.name.toLowerCase().includes(this.state.filterString.toLowerCase())) : []
+    
+    //create variable playListToRender, the playListToRender contain data already filter with Filter component, but if not set the playListTOrender will return null array[]
+    let playListToRender = this.state.serverData.user ? this.state.serverData.user.playlists.filter( playlist => playlist.name.toLowerCase().includes(this.state.filterString.toLowerCase())
+) : []
 
     return (
       <div className="App">
-
+        {/* Check data if state.serverData.user already set or not, if already set it will return all component, if not it will be show loading  */}     
         {this.state.serverData.user ?
           <div>
             <h1>{this.state.serverData.user.name}'s Playlists
             </h1>
+
+            {/* create prop playlist for PlaylistCounter with data already filter*/}
             <PlaylistCounter playlists={playListToRender} />
+
+            {/* create prop playlist for HoursCounter with data already filter*/}
             <HoursCounter  playlists={playListToRender}/>
-            <Filter onTextChange = {text => this.setState({filterString: text})} />
+
+             {/* create prop onTextChange for Filter with object text*/}
+            <Filter onTextChange = {text => this.setState({filterString:text})} />
+
+            {/* Loopong for playlist data */}
             {
-              playListToRender.map( playlist => 
-                 <Playlist playlist={playlist}/>
-              )
+              playListToRender.map( (playlist, id ) => { 
+                 return <Playlist key={id} playlist={playlist}/>
+              })
             }
 
           </div> : <h1>Loading...</h1>
